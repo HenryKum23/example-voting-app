@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mario-deployment
+  namespace: maria-ns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: mario
+  template:
+    metadata:
+      labels:
+        name: mario
+    spec:
+      containers:
+        - name: mario
+          image: sevenajay/mario
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mario-service
+  namespace: maria-ns
+spec:
+  type: NodePort
+  selector:
+    name: mario
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 80
+      nodePort: 31008
