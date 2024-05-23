@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tetris
+  name: tetris-deploy
+  namespace: argocd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tetris
+  template:
+    metadata:
+      labels:
+        app: tetris
+    spec:
+      containers:
+      - image: lrakai/tetris
+        name: tetris-container
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: tetris
+  name: tetris-svc
+  namespace: argocd
+spec:
+  type: NodePort
+  ports:
+  - name: "tetris-service"
+    port: 5005
+    targetPort: 80
+    nodePort: 31006
+  selector:
+    app: tetris
